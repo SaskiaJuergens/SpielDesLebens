@@ -1,0 +1,131 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spiel Lobby</title>
+  <style>
+    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 50px; }
+    .hidden { display: none; }
+    #lobby, #joinLobby { margin-top: 20px; }
+    .player-slot { border: 1px solid #ccc; padding: 10px; margin: 5px; width: 200px; text-align: center; }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+</head>
+<body>
+  <h1>Multiplayer Lobby</h1>
+
+  <div id="startMenu">
+    <button onclick="createLobby()">Spiel erstellen</button>
+    <button onclick="showJoinLobby()">Spiel beitreten</button>
+  </div>
+
+  <div id="hostLobby" class="hidden">
+    <input type="text" id="hostName" placeholder="Dein Name (Host)" />
+    <p>Raum-ID: <span id="roomId"></span></p>
+    <div id="playerSlots">
+      <!-- Dynamisch generierte Slots -->
+    </div>
+    <button onclick="leaveLobby()">Zurück</button>
+  </div>
+
+  <div id="joinLobby" class="hidden">
+    <input type="text" id="joinName" placeholder="Dein Name" />
+    <input type="text" id="joinRoomId" placeholder="Raum-ID" />
+    <button onclick="joinRoom()">Beitreten</button>
+  </div>
+
+  <script>
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+    import { getDatabase, ref, set, get, remove, onValue } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
+
+    const firebaseConfig = {
+      apiKey: "DEINE_API_KEY",
+      authDomain: "DEIN_AUTH_DOMAIN",
+      projectId: "DEIN_PROJECT_ID",
+      storageBucket: "DEIN_BUCKET",
+      messagingSenderId: "DEINE_SENDER_ID",
+      appId: "DEINE_APP_ID",
+      databaseURL: "DEIN_DB_URL"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let currentRoomId = null;
+    let isHost = false;
+
+    function createLobby() {
+      isHost = true;
+      currentRoomId = Math.floor(100000 + Math.random() * 900000).toString();
+      const roomRef = ref(db, `rooms/${currentRoomId}`);
+      set(roomRef, {
+        host: '',
+        players: []
+      });
+
+      document.getElementById('startMenu').classList.add('hidden');
+      document.getElementById('hostLobby').classList.remove('hidden');
+      document.getElementById('roomId').textContent = currentRoomId;
+      renderPlayerSlots([]);
+
+      onValue(roomRef, (snapshot) => {
+        const data = snapshot.val();
+        renderPlayerSlots(data.players || []);
+      });
+    }
+
+    function renderPlayerSlots(players) {
+      const container = document.getElementById('playerSlots');
+      container.innerHTML = '';
+      const hostName = document.getElementById('hostName').value || '[Host Name]';
+      const allPlayers = [hostName, ...players];
+      for (let i = 0; i < 6; i++) {
+        const div = document.createElement('div');
+        div.className = 'player-slot';
+        div.textContent = allPlayers[i] || 'Leer';
+        container.appendChild(div);
+      }
+    }
+
+    function showJoinLobby() {
+      document.getElementById('startMenu').classList.add('hidden');
+      document.getElementById('joinLobby').classList.remove('hidden');
+    }
+
+    function joinRoom() {
+      const name = document.getElementById('joinName').value;
+      const roomId = document.getElementById('joinRoomId').value;
+      const roomRef = ref(db, `rooms/${roomId}`);
+      get(roomRef).then(snapshot => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const players = data.players || [];
+          if (players.length < 5) {
+            players.push(name);
+            set(roomRef, {
+              host: data.host,
+              players
+            });
+            alert('Beigetreten!');
+            document.body.innerHTML = `<h1>Lobby</h1><p>Beigetreten zu Raum ${roomId}</p>`;
+          } else {
+            alert('Lobby ist voll');
+          }
+        } else {
+          alert('Lobby existiert nicht');
+        }
+      });
+    }
+
+    function leaveLobby() {
+      if (isHost && currentRoomId) {
+        remove(ref(db, `rooms/${currentRoomId}`));
+      }
+      location.reload();
+    }
+  </script>
+</body>
+</html>
