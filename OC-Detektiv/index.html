@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OC Snapshot Game</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #0f0f1a;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  #card {
+    width: 70%;
+    max-width: 600px;
+    padding: 20px;
+    background: #1c1c2e;
+    border-radius: 15px;
+    font-size: 18px;
+    text-align: center;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #6c5ce7;
+    color: white;
+  }
+
+  button:hover {
+    background: #5a4bd6;
+  }
+
+  #imageOverlay{
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.9);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    cursor:pointer;
+}
+
+#fullscreenImage{
+    max-width:95%;
+    max-height:95%;
+    border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>OC Snapshot Generator</h1>
+
+<div id="card">Drücke den Button für eine Snapshot-Karte</div>
+
+<button onclick="openImage()">Bild anzeigen</button>
+<div id="imageOverlay" onclick="closeImage()">
+    <img src="OCs.jpg" id="fullscreenImage">
+</div>
+
+
+<button onclick="drawCard()">Ziehe Karte</button>
+
+<script>
+const cards = [
+"Was ist dein OC’s größte Angst?",
+"Was würde dein OC niemals tun?",
+"Ist dein OC eher rational oder emotional?",
+"Vertraut dein OC Menschen schnell?",
+"Was verletzt deinen OC am meisten?",
+
+"Würde dein OC lügen, um jemanden zu retten?",
+"Ist dein OC eher selbstlos oder egoistisch?",
+"Was ist wichtiger: Liebe oder Macht?",
+"Würde dein OC jemanden opfern?",
+"Hat dein OC klare Grenzen?",
+
+"Wie verhält sich dein OC in Liebe?",
+"Ist dein OC loyal?",
+"Verzeiht dein OC Verrat?",
+"Braucht dein OC andere Menschen?",
+"Kann dein OC alleine sein?",
+
+"Plant dein OC voraus oder improvisiert?",
+"Ist dein OC impulsiv?",
+"Wie geht dein OC mit Verlust um?",
+"Ist dein OC ein Anführer?",
+"Folgt dein OC Regeln?",
+
+"Fühlt sich dein OC irgendwo zuhause?",
+"Hat dein OC eine Mission?",
+"Ist dein OC stolz auf sich?",
+"Was definiert deinen OC?",
+"Hat dein OC ein Geheimnis?",
+
+"Wie reagiert dein OC auf Verrat?",
+"Wird dein OC aggressiv?",
+"Gibt dein OC schnell auf?",
+"Kämpft dein OC für Gerechtigkeit?",
+"Ist dein OC rachsüchtig?",
+
+"Ist dein OC beliebt?",
+"Kann dein OC gut reden?",
+"Manipuliert dein OC andere?",
+"Führt dein OC andere?",
+"Folgt dein OC anderen?",
+
+"Was ist dein OC’s größter Fehler?",
+"Was würde dein OC bereuen?",
+"Was macht deinen OC einzigartig?",
+"Was zerstört deinen OC emotional?",
+"Was gibt deinem OC Hoffnung?",
+
+"Würde dein OC Macht missbrauchen?",
+"Ist dein OC gefährlich?",
+"Ist dein OC eher Licht oder Dunkelheit?",
+"Hat dein OC Freunde oder Verbündete?",
+"Was wäre dein OC in einer Krise?",
+
+"Ist dein OC eher Haupt- oder Nebenfigur?",
+"Ist dein OC tragisch?",
+"Ist dein OC heroisch?",
+"Würdest du deinem OC vertrauen?",
+
+"Dein OC wird romantisch angesprochen. Ziehe 1 OC-Karte und erkläre, wie dein OC reagiert (ablehnend, neugierig, überfordert, interessiert usw.).",
+"Dein OC wird von einem anderen OC öffentlich gelobt. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC (stolz, verlegen, misstrauisch usw.).",
+"Dein OC wird von einem OC ignoriert, obwohl er Hilfe braucht. Ziehe 1 OC-Karte und erkläre die emotionale Reaktion deines OC.",
+"Dein OC wird direkt nach einem Kampf respektvoll herausgefordert. Ziehe 1 OC-Karte und beschreibe, ob dein OC annimmt oder ausweicht.",
+"Dein OC bekommt unerwartet ein Geschenk von einem OC. Ziehe 1 OC-Karte und erkläre, wie dein OC darauf reagiert.",
+"Dein OC wird von einem OC angelogen, den er eigentlich vertraut. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC nach dem Entdecken der Lüge.",
+"Dein OC wird in einer Gruppe von OCs ausgeschlossen. Ziehe 1 OC-Karte und erkläre, wie dein OC damit umgeht.",
+"Dein OC sieht, wie zwei andere OCs sich streiten und er wird um Stellungnahme gebeten. Ziehe 1 OC-Karte und erkläre die Entscheidung deines OC.",
+"Dein OC wird von einem OC um Hilfe gebeten, obwohl er selbst in Gefahr ist. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC.",
+"Dein OC wird von einem OC plötzlich konfrontiert mit einem alten Fehler. Ziehe 1 OC-Karte und erkläre die emotionale Reaktion deines OC.",
+"Dein OC wird von einem OC beschützt, ohne dass er es wollte. Ziehe 1 OC-Karte und beschreibe, wie dein OC darauf reagiert.",
+"Dein OC wird von einem OC zu einem gemeinsamen Abenteuer eingeladen. Ziehe 1 OC-Karte und erkläre, ob dein OC annimmt oder ablehnt.",
+"Dein OC wird von einem OC provoziert. Ziehe 1 OC-Karte und beschreibe, ob dein OC ruhig bleibt oder reagiert.",
+"Dein OC bekommt eine überraschende Entschuldigung von einem OC. Ziehe 1 OC-Karte und erkläre die Reaktion deines OC.",
+"Dein OC wird Zeuge, wie ein OC sich selbst opfert oder riskiert. Ziehe 1 OC-Karte und beschreibe die emotionale Reaktion deines OC.",
+"Dein OC wird von einem OC gefragt, ob er ihm vertraut. Ziehe 1 OC-Karte und erkläre die Antwort deines OC.",
+"Dein OC wird in eine peinliche Situation mit einem OC gebracht. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC.",
+"Dein OC wird von einem OC überraschend gerettet. Ziehe 1 OC-Karte und erkläre, wie dein OC darauf reagiert.",
+"Dein OC wird von einem OC herausgefordert, eine Entscheidung sofort zu treffen. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC.",
+"Dein OC wird von einem OC emotional verletzt. Ziehe 1 OC-Karte und erkläre, ob dein OC vergibt, sich distanziert oder konfrontiert.",
+
+"Dein OC muss entscheiden: Wen rettest du aus einer einstürzenden Bibliothek – OC A oder OC B? Ziehe 2 OC-Karten und wähle einen OC.",
+"Dein OC steht vor der Entscheidung: Verteidigst du OC A gegen eine schwere Anschuldigung oder lässt du OC B die Wahrheit aussprechen? Ziehe 2 OC-Karten und wähle.",
+"Dein OC besitzt nur einen Heiltrank – wem gibst du ihn, OC A oder OC B? Ziehe 2 OC-Karten und wähle einen OC.",
+"Dein OC muss entscheiden, wem er in einer Gefahrensituation vertraut: dem warnenden OC oder dem schweigenden OC. Ziehe 2 OC-Karten und wähle.",
+"Dein OC kann nur einen der beiden OCs im öffentlichen Streit unterstützen – wen stellst du auf deine Seite? Ziehe 2 OC-Karten und wähle.",
+"Dein OC steht vor einer magischen Falle: Wen rettest du zuerst – OC A oder OC B? Ziehe 2 OC-Karten und wähle.",
+"Dein OC erhält ein Geheimnis über einen der beiden OCs – glaubst du OC A oder OC B? Ziehe 2 OC-Karten und wähle.",
+"Dein OC muss entscheiden, welchem OC er bei einer Mission hilft – OC A oder OC B? Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet: Deckt er den Fehler von OC A oder schützt er OC B vor den Konsequenzen? Ziehe 2 OC-Karten und wähle.",
+"Dein OC kann nur einen verletzten OC behandeln – wem rettest du die Einsatzfähigkeit? Ziehe 2 OC-Karten und wähle.",
+
+"Dein OC muss entscheiden: Wem gibst du deine Loyalität – dem beleidigten OC oder dem verteidigenden OC? Ziehe 2 OC-Karten und wähle.",
+"Dein OC muss einen OC vor einem magischen Alarm warnen – wen wählst du? Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welcher OC durch ein magisches Tor gehen darf und wer zurückbleibt. Ziehe 2 OC-Karten und wähle.",
+
+"Dein OC steht vor einem brennenden Observatorium – welchen OC rettest du? Ziehe 2 OC-Karten und wähle einen OC.",
+"Dein OC muss entscheiden, ob er die Lüge über OC A aufdeckt oder OC B schützt. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welcher OC den Fluch erhält und eine Runde nicht sprechen kann. Ziehe 2 OC-Karten und wähle.",
+"Dein OC steht vor einem einstürzenden Portal – welchen OC rettest du, welchen verlierst du? Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchem OC er eine wichtige Nachricht anvertraut – OC A oder OC B? Ziehe 2 OC-Karten und wähle.",
+"Dein OC muss entscheiden, welcher OC von einem Angriff getroffen wird. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchem OC er im Verratskonflikt glaubt. Ziehe 2 OC-Karten und wähle.",
+
+"Dein OC entscheidet, welcher OC ein magisches Artefakt aktivieren darf. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchen OC er nach einer Verletzung stabilisiert. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchen OC er aus einer gefährlichen Fluchtsituation rettet. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, ob er Beweise gegen OC A nutzt oder OC B schützt. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchen OC er aus der Vergangenheit rettet. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchem OC er Zugang zu einem geheimen Raum gibt. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchen OC er in einer früheren Rettungssituation bevorzugt. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchen OC er temporär aus dem Spiel nimmt (Sperre für 1 Runde). Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchem OC er Schutz gewährt und wem er ihn verweigert. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchen OC er in einem Kampf unterstützt und zum Sieger macht. Ziehe 2 OC-Karten und wähle.",
+
+"Dein OC entscheidet, welchem OC er den Heiltrank gibt – nur einer kann vollständig geheilt werden. Ziehe 2 OC-Karten und wähle.",
+"Dein OC steht vor einem magischen Urteil: Welchen OC schützt du, welchen schwächst du dauerhaft? Ziehe 2 OC-Karten und wähle."
+];
+
+function drawCard() {
+  const randomIndex = Math.floor(Math.random() * cards.length);
+  document.getElementById("card").innerText = cards[randomIndex];
+}
+
+function openImage() {
+  document.getElementById("imageOverlay").style.display = "flex";
+}
+
+function closeImage() {
+  document.getElementById("imageOverlay").style.display = "none";
+}
+</script>
+
+</body>
+</html>
