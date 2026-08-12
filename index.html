@@ -78,13 +78,17 @@
 
 <div id="card">Drücke den Button für eine Snapshot-Karte</div>
 
+<button onclick="drawCard()">Ziehe Karte</button>
+
+<br>
+<br>
+<br>
+
 <button onclick="openImage()">Bild anzeigen</button>
 <div id="imageOverlay" onclick="closeImage()">
     <img src="OCs.jpg" id="fullscreenImage">
 </div>
 
-
-<button onclick="drawCard()">Ziehe Karte</button>
 
 <script>
 const cards = [
@@ -100,26 +104,22 @@ const cards = [
 "Würde dein OC jemanden opfern?",
 "Hat dein OC klare Grenzen?",
 
-"Wie verhält sich dein OC in Liebe?",
+"Wie verhält sich dein OC in der Liebe?",
 "Ist dein OC loyal?",
 "Verzeiht dein OC Verrat?",
-"Braucht dein OC andere Menschen?",
-"Kann dein OC alleine sein?",
+"Ist dein OC introvertiert oder exrtovertiert",
 
-"Plant dein OC voraus oder improvisiert?",
+"Plant dein OC voraus oder spontan?",
 "Ist dein OC impulsiv?",
 "Wie geht dein OC mit Verlust um?",
 "Ist dein OC ein Anführer?",
-"Folgt dein OC Regeln?",
 
 "Fühlt sich dein OC irgendwo zuhause?",
-"Hat dein OC eine Mission?",
+"Hat dein OC eine Mission und welche?",
 "Ist dein OC stolz auf sich?",
-"Was definiert deinen OC?",
-"Hat dein OC ein Geheimnis?",
+"Was definiert deinen OC am meisten?",
+"Hat dein OC ein Geheimnis, welches?",
 
-"Wie reagiert dein OC auf Verrat?",
-"Wird dein OC aggressiv?",
 "Gibt dein OC schnell auf?",
 "Kämpft dein OC für Gerechtigkeit?",
 "Ist dein OC rachsüchtig?",
@@ -127,11 +127,10 @@ const cards = [
 "Ist dein OC beliebt?",
 "Kann dein OC gut reden?",
 "Manipuliert dein OC andere?",
-"Führt dein OC andere?",
 "Folgt dein OC anderen?",
 
-"Was ist dein OC’s größter Fehler?",
-"Was würde dein OC bereuen?",
+"Was ist dein OC’s größte Schwachstelle?",
+"Was würde dein OC am meisten bereuen?",
 "Was macht deinen OC einzigartig?",
 "Was zerstört deinen OC emotional?",
 "Was gibt deinem OC Hoffnung?",
@@ -140,75 +139,113 @@ const cards = [
 "Ist dein OC gefährlich?",
 "Ist dein OC eher Licht oder Dunkelheit?",
 "Hat dein OC Freunde oder Verbündete?",
-"Was wäre dein OC in einer Krise?",
+"Wie würde dein OC in einer Krise verhalten?",
 
 "Ist dein OC eher Haupt- oder Nebenfigur?",
 "Ist dein OC tragisch?",
 "Ist dein OC heroisch?",
-"Würdest du deinem OC vertrauen?",
+
+"Dein OC trifft einen anderen OC zum ersten Mal. Ziehe 1 OC-Karte. Wie würde das erste Aufeinandertreffen aussehen?",
+"Ziehe 1 OC-Karte. Wie würden dein OC und dieser OC zueinanderstehen? Enge Freunde, Rivalen, Hobby-Buddys, Crime-Komplizen, Geschwister-Vibes, heimliche Crushes, Zweckgemeinschaft ...?",
+"Ziehe 1 OC-Karte. Dein OC muss mit diesem OC einen Monat zusammenleben. Was würde passieren?",
+"Ziehe 1 OC-Karte. Dein OC und dieser OC müssen gemeinsam ein Geheimnis bewahren. Würden sie sich gegenseitig vertrauen?",
+"Ziehe 1 OC-Karte. Dein OC und dieser OC müssen gemeinsam kochen. Wie endet das?",
+"Ziehe 1 OC-Karte. Dein OC entdeckt, dass dieser OC hinter seinem Rücken schlecht über ihn geredet hat. Wie reagiert dein OC?",
+"Ziehe 1 OC-Karte. Angenommen dein OC und dieser OC verlieben sich in dieselbe Person. Wie würde dein OC damit umgehen?",
+"Dein OC spielt Kiss, Marry, Kill mit den folgenden 3 gezogenen OCs.",
+"Ziehe 2 OC-Karten. Dein OC kann nur mit einem davon befreundet sein. Wen würde er wählen und warum?",
 
 "Dein OC wird romantisch angesprochen. Ziehe 1 OC-Karte und erkläre, wie dein OC reagiert (ablehnend, neugierig, überfordert, interessiert usw.).",
 "Dein OC wird von einem anderen OC öffentlich gelobt. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC (stolz, verlegen, misstrauisch usw.).",
-"Dein OC wird von einem OC ignoriert, obwohl er Hilfe braucht. Ziehe 1 OC-Karte und erkläre die emotionale Reaktion deines OC.",
-"Dein OC wird direkt nach einem Kampf respektvoll herausgefordert. Ziehe 1 OC-Karte und beschreibe, ob dein OC annimmt oder ausweicht.",
+"Dein OC wird von einem OC ignoriert. Ziehe 1 OC-Karte und erkläre die emotionale Reaktion deines OC.",
+"Dein OC wird direkt nach einem Streit zu einem Kampf herausgefordert. Ziehe 1 OC-Karte und beschreibe, ob dein OC annimmt oder ausweicht.",
 "Dein OC bekommt unerwartet ein Geschenk von einem OC. Ziehe 1 OC-Karte und erkläre, wie dein OC darauf reagiert.",
-"Dein OC wird von einem OC angelogen, den er eigentlich vertraut. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC nach dem Entdecken der Lüge.",
-"Dein OC wird in einer Gruppe von OCs ausgeschlossen. Ziehe 1 OC-Karte und erkläre, wie dein OC damit umgeht.",
-"Dein OC sieht, wie zwei andere OCs sich streiten und er wird um Stellungnahme gebeten. Ziehe 1 OC-Karte und erkläre die Entscheidung deines OC.",
-"Dein OC wird von einem OC um Hilfe gebeten, obwohl er selbst in Gefahr ist. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC.",
+"Dein OC wird von einem OC angelogen. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC nach dem Entdecken der Lüge.",
+"Dein OC wird in einer Gruppe von OCs ausgeschlossen. Ziehe 3 OC-Karte und erkläre, wie dein OC damit umgeht.",
+"Dein OC sieht, wie zwei andere OCs sich streiten und versucht sich als Streitschlichter. Ziehe 2 OC-Karte und erkläre die Entscheidung deines OC.",
+"Dein OC wird von einem OC um Hilfe gebeten, obwohl er selbst Hilfe benötigt. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC.",
 "Dein OC wird von einem OC plötzlich konfrontiert mit einem alten Fehler. Ziehe 1 OC-Karte und erkläre die emotionale Reaktion deines OC.",
-"Dein OC wird von einem OC beschützt, ohne dass er es wollte. Ziehe 1 OC-Karte und beschreibe, wie dein OC darauf reagiert.",
+"Dein OC wird von einem OC beschützt, ohne dass er darum gebeten hat. Ziehe 1 OC-Karte und beschreibe, wie dein OC darauf reagiert.",
 "Dein OC wird von einem OC zu einem gemeinsamen Abenteuer eingeladen. Ziehe 1 OC-Karte und erkläre, ob dein OC annimmt oder ablehnt.",
 "Dein OC wird von einem OC provoziert. Ziehe 1 OC-Karte und beschreibe, ob dein OC ruhig bleibt oder reagiert.",
-"Dein OC bekommt eine überraschende Entschuldigung von einem OC. Ziehe 1 OC-Karte und erkläre die Reaktion deines OC.",
-"Dein OC wird Zeuge, wie ein OC sich selbst opfert oder riskiert. Ziehe 1 OC-Karte und beschreibe die emotionale Reaktion deines OC.",
+"Dein OC wird Zeuge, wie ein OC sich selbst opfert. Ziehe 1 OC-Karte und beschreibe die emotionale Reaktion deines OC.",
 "Dein OC wird von einem OC gefragt, ob er ihm vertraut. Ziehe 1 OC-Karte und erkläre die Antwort deines OC.",
-"Dein OC wird in eine peinliche Situation mit einem OC gebracht. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC.",
-"Dein OC wird von einem OC überraschend gerettet. Ziehe 1 OC-Karte und erkläre, wie dein OC darauf reagiert.",
-"Dein OC wird von einem OC herausgefordert, eine Entscheidung sofort zu treffen. Ziehe 1 OC-Karte und beschreibe die Reaktion deines OC.",
-"Dein OC wird von einem OC emotional verletzt. Ziehe 1 OC-Karte und erkläre, ob dein OC vergibt, sich distanziert oder konfrontiert.",
+"Dein OC wird in eine peinliche Situation mit einem OC gebracht. Ziehe 1 OC-Karte und beschreibe eine mögliche Situtaion die Reaktion deines OC.",
 
-"Dein OC muss entscheiden: Wen rettest du aus einer einstürzenden Bibliothek – OC A oder OC B? Ziehe 2 OC-Karten und wähle einen OC.",
-"Dein OC steht vor der Entscheidung: Verteidigst du OC A gegen eine schwere Anschuldigung oder lässt du OC B die Wahrheit aussprechen? Ziehe 2 OC-Karten und wähle.",
-"Dein OC besitzt nur einen Heiltrank – wem gibst du ihn, OC A oder OC B? Ziehe 2 OC-Karten und wähle einen OC.",
-"Dein OC muss entscheiden, wem er in einer Gefahrensituation vertraut: dem warnenden OC oder dem schweigenden OC. Ziehe 2 OC-Karten und wähle.",
-"Dein OC kann nur einen der beiden OCs im öffentlichen Streit unterstützen – wen stellst du auf deine Seite? Ziehe 2 OC-Karten und wähle.",
-"Dein OC steht vor einer magischen Falle: Wen rettest du zuerst – OC A oder OC B? Ziehe 2 OC-Karten und wähle.",
-"Dein OC erhält ein Geheimnis über einen der beiden OCs – glaubst du OC A oder OC B? Ziehe 2 OC-Karten und wähle.",
-"Dein OC muss entscheiden, welchem OC er bei einer Mission hilft – OC A oder OC B? Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet: Deckt er den Fehler von OC A oder schützt er OC B vor den Konsequenzen? Ziehe 2 OC-Karten und wähle.",
-"Dein OC kann nur einen verletzten OC behandeln – wem rettest du die Einsatzfähigkeit? Ziehe 2 OC-Karten und wähle.",
+"Dein OC muss entscheiden: Wen rettest du aus einer einstürzenden Bibliothek? Ziehe 2 OC-Karten und wähle einen OC.",
+"Dein OC besitzt nur einen Heiltrank – wem gibst du ihn? Ziehe 2 OC-Karten und wähle einen OC.",
+"Dein OC muss entscheiden, wem er in einer Gefahrensituation vertraut. Ziehe 2 OC-Karten und wähle.",
+"Dein OC kann nur einen der beiden OCs im öffentlichen Streit unterstützen – auf wessen Seite stellt sich dein OC? Ziehe 2 OC-Karten und wähle.",
+"Dein OC erfährt ein Geheimnis über OC A von OC B, aber OC A widerspricht dem – glaubst du OC A oder OC B? Ziehe 2 OC-Karten und wähle.",
+"Dein OC muss entscheiden, welchem OC er bei einer Mission (deiner Wahl) lieber dabei hätte? Ziehe 4 OC-Karten und wähle einen.",
+"Dein OC muss entscheiden: Wem gibst du deine Loyalität? Ziehe 2 OC-Karten und wähle.",
+"Dein OC darf sich selbst eine magische Fähigkeit geben, die der OC noch nicht hat. Welche wäre das?",
+"Dein OC sucht ein Geschenk aus für des OC's nahestehenste anderen OC (nicht namelich nennen!). Was für ein Geschenk wäre das?",
 
-"Dein OC muss entscheiden: Wem gibst du deine Loyalität – dem beleidigten OC oder dem verteidigenden OC? Ziehe 2 OC-Karten und wähle.",
-"Dein OC muss einen OC vor einem magischen Alarm warnen – wen wählst du? Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welcher OC durch ein magisches Tor gehen darf und wer zurückbleibt. Ziehe 2 OC-Karten und wähle.",
+"Dein OC steht vor einem brennenden Observatorium – welchen OC rettest du? Ziehe 4 OC-Karten und wähle 2 OC.",
+"Dein OC entscheidet, welcher OC den Fluch erhält und was für einer das ist. Ziehe 2 OC-Karten und entscheide.",
+"Dein OC ist ein Kpop-Idol. Solist oder Gruppe? Bei Gruppe suche die passende Kpop-Gruppe aus allen OCs (mindestens 1 von jedem Artist): Mögliche Positionen: Leader, Visual, Face of the Group, the Center, (Maknae), Main-/Lead-/Sub-Vocalist, Main-/Lead-/Sub-Rapper, Main-/Lead-/Sub-Dancer",
+"Dein OC ist als Trainee in einer Kpop-Idol-Gruppe. Ziehe 5 Karten für die anderen Mitglieder und erkläre die Dynamik zwischen den einzelnen Mitgliedern zu deinem OC",
+"Wenn dein OC ein Tier wäre, welches wäre der OC?",
+"Dein OC entscheidet, welchem OC er eine wichtige Nachricht anvertraut? Ziehe 3 OC-Karten und wähle.",
 
-"Dein OC steht vor einem brennenden Observatorium – welchen OC rettest du? Ziehe 2 OC-Karten und wähle einen OC.",
-"Dein OC muss entscheiden, ob er die Lüge über OC A aufdeckt oder OC B schützt. Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welcher OC den Fluch erhält und eine Runde nicht sprechen kann. Ziehe 2 OC-Karten und wähle.",
-"Dein OC steht vor einem einstürzenden Portal – welchen OC rettest du, welchen verlierst du? Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welchem OC er eine wichtige Nachricht anvertraut – OC A oder OC B? Ziehe 2 OC-Karten und wähle.",
-"Dein OC muss entscheiden, welcher OC von einem Angriff getroffen wird. Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welchem OC er im Verratskonflikt glaubt. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welcher OC ein magisches Artefakt erhält. Ziehe 2 OC-Karten und wähle.",
+"Dein OC entscheidet, welchen OC's Vergangenheit er ändert und wie. Ziehe 2 OC-Karten und wähle.",
+"Dein OC kämpft gegen einen anderen OC, wer würde gewinnen? Ziehe 1 OC-Karten und wähle.",
 
-"Dein OC entscheidet, welcher OC ein magisches Artefakt aktivieren darf. Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welchen OC er nach einer Verletzung stabilisiert. Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welchen OC er aus einer gefährlichen Fluchtsituation rettet. Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, ob er Beweise gegen OC A nutzt oder OC B schützt. Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welchen OC er aus der Vergangenheit rettet. Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welchem OC er Zugang zu einem geheimen Raum gibt. Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welchen OC er in einer früheren Rettungssituation bevorzugt. Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welchen OC er temporär aus dem Spiel nimmt (Sperre für 1 Runde). Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welchem OC er Schutz gewährt und wem er ihn verweigert. Ziehe 2 OC-Karten und wähle.",
-"Dein OC entscheidet, welchen OC er in einem Kampf unterstützt und zum Sieger macht. Ziehe 2 OC-Karten und wähle.",
+"Dein OC gründet eine Band. Stelle deine Band zusammen aus allen OCs (außer deinen eigenen): Wer singt, wer spielt Schlagzeug, wer spielt Gitarre und wer übernimmt den Bass? Begründe jede Wahl.",
+"Dein OC muss eine WG gründen. Wähle aus allen OCs (außer deinen) drei Mitbewohner. Mit welchen 3 würde dein OC freiwillig zusammenleben – und mit wem würde er nach einer Woche durchdrehen?",
+"Dein OC eröffnet ein Café. Ziehe 3 OCs und verteile die Jobs: Putzkraft, Kellner, Koch. Wer wäre für welche Aufgabe geeignet?",
+"Dein OC braucht ein Team für einen Bankraub. Ziehe 4 OCs und verteile die Rollen: Mastermind, Hacker, Fahrer und jemand, der alles improvisiert.",
+"Dein OC will eine Reality-Show gewinnen. Dein OC stellt aus 4 anderen OCs ein Team zusammen das ihm zum Sieg verhelfen soll (aber je nachdem wählt er auch persönlich)?",
+"Dein OC landet plötzlich in einer Karaoke-Bar. Ziehe 2 OCs. Mit wem würde dein OC ein Duett singen – und welches Genre bzw. Lied würden sie wählen?",
+"Dein OC muss eine Party organisieren. Ziehe 4 OCs und verteile die Aufgaben: DJ, Dekoration, Essen und Sicherheitsdienst. Wer bekommt welchen Job?",
+"Dein OC braucht einen persönlichen Bodyguard. Wen würde er wählen aus allen OCs?",
+"Dein OC wird zu einem Kochwettbewerb gezwungen. Welche 2 OCs zieht er mit rein und warum? Wer kocht, wer richtet das Essen an und wer darf auf keinen Fall in die Küche?",
+"Dein OC braucht jemanden, der ein Geheimnis für ihn bewahrt. Wen von den OCs der anderen Künstler würde der OC wählen?",
+"Dein OC wird Teil eines Superheldenteams. Wähle einen: Anführer, den Kraftprotz, der Stratege und Empathe? (Versuche von jedem Künstler ein OC zu wählen)" ,
+"Dein OC muss ein Theaterstück aufführen. Ziehe 1 OC und entscheide von allen OCs des Künstlers des gezogenen OCs, wen würde dein OC die Hauptrolle, den Bösewicht und Liebesinteresse spielen lassen?",
+"Dein OC braucht einen Partner für einen Tanzwettbewerb. Ziehe 2 OCs. Wen wählt dein OC und warum?",
+"Dein OC muss eine Sportmannschaft zusammenstellen. Dein OC darf von jedem Künstler 1 OC wählen. Wer wird Kapitän, Torwart, Stürmer, Verteidiger und Ersatzspieler?",
+"Dein OC strandet mit 3 anderen OCs auf einer einsamen Insel. Ziehe 3 OCs. Wie würde die Situtation verlaufen?",
+"Dein OC wird zum Zombie in eine Zombie-Apokalypse. Ziehe 5 OC-Karten und entscheide die Reihenfolge nach der du die OCs essen würdest und warum?",
+"Dein OC wird plötzlich berühmt. Ziehe 2 OCs. Einer wird sein Manager, einer sein bester Freund. Wer bekommt welche Rolle?",
+"Dein OC tritt bei einer Talentshow auf. Ziehe 6 OCs. Er entscheided frei wer davon dabei ist und wer nicht und warum?",
+"Dein OC muss für einen Tag mit einem anderen OC den Körper tauschen. Ziehe 1 OC. Was wäre das Erste, was dein OC in dessen Körper tun würde?",
+"Dein OC bekommt die Aufgabe, einen anderen OC für eine Woche zu babysitten. Ziehe 1 OC. Wie lange würde dein OC das durchhalten?",
+"Dein OC muss eine Reality-Dating-Show gewinnen. Ziehe 3 OCs. Wen würde dein OC daten, wen als besten Freund behalten und wen sofort aus der Show wählen?",
+"Dein OC veranstaltet eine Pyjamaparty. Ziehe 2 OCs. Wer von den drei bleibt bis zum Sonnenaufgang wach, wer schläft zuerst ein und wer erzählt um 3 Uhr morgens plötzlich seine Lebensgeschichte?",
+"Dein OC braucht jemanden für einen Fake-Beziehungs-Skandal. Welchem der OCs der anderen Künstler würde der OC fragen?",
+"Dein OC muss eine Person auswählen, mit der er für den Rest seines Lebens auf einer Raumstation leben müsste. Ziehe 3 OC-Karten. Wen wählt dein OC?"
 
-"Dein OC entscheidet, welchem OC er den Heiltrank gibt – nur einer kann vollständig geheilt werden. Ziehe 2 OC-Karten und wähle.",
-"Dein OC steht vor einem magischen Urteil: Welchen OC schützt du, welchen schwächst du dauerhaft? Ziehe 2 OC-Karten und wähle."
 ];
 
+//function drawCard() {
+//  const randomIndex = Math.floor(Math.random() * cards.length);
+//  document.getElementById("card").innerText = cards[randomIndex];
+//}
+
+let recentCards = [];
+const MAX_RECENT = 40;
+
 function drawCard() {
-  const randomIndex = Math.floor(Math.random() * cards.length);
-  document.getElementById("card").innerText = cards[randomIndex];
+    let randomIndex;
+
+    // So lange neue Karte suchen, bis sie nicht unter den letzten 15 ist
+    do {
+        randomIndex = Math.floor(Math.random() * cards.length);
+    } while (recentCards.includes(randomIndex) && recentCards.length < cards.length);
+
+    // Karte anzeigen
+    document.getElementById("card").innerText = cards[randomIndex];
+
+    // Karte zu den zuletzt gezogenen hinzufügen
+    recentCards.push(randomIndex);
+
+    // Wenn mehr als 15 gespeichert sind, älteste entfernen
+    if (recentCards.length > MAX_RECENT) {
+        recentCards.shift();
+    }
 }
 
 function openImage() {
